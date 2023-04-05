@@ -7,22 +7,23 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public class ItemRepositoryImpl {
+@Repository
+public class ItemRepositoryImpl implements ItemRepository{
 
     @Autowired
-    ItemRepository itemRepository;
+    private EntityManager em;
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @Override
+    public List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable){
 
-    public List<ItemEntity> searchItemsbyContitions(String name, String tag, String cvs, String order, Pageable pageable){
-
-        EntityManager em = entityManagerFactory.createEntityManager();
         QItemEntity item = QItemEntity.itemEntity;
         QSyncKey syncKey = QSyncKey.syncKey;
 
@@ -51,9 +52,8 @@ public class ItemRepositoryImpl {
 
         List<ItemEntity> result = query.fetch();
 
-        em.close();
-
         return result;
 
     }
+
 }
