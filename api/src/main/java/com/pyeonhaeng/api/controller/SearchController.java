@@ -5,6 +5,9 @@ import com.pyeonhaeng.api.entity.ItemEntity;
 import com.pyeonhaeng.api.service.SearchServiceImpl;
 import com.pyeonhaeng.api.utility.PhUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +22,7 @@ public class SearchController {
 
     private final SearchServiceImpl searchServiceImpl;
     @GetMapping("search")
-    public String searchItem(
+    public ResponseEntity searchItem(
             @RequestParam(value = "name",required = false) String name,
             @RequestParam(value = "cvs") String cvs,
             @RequestParam(value = "event") String tag,
@@ -62,15 +65,22 @@ public class SearchController {
 
 
         String result = new String();
+        int responseCount = 0;
 
         try{
             List<ItemEntity> searchData = searchServiceImpl.searchItems(processedName,processedCvs,processedTag,offset,limit,order);
             result = PhUtility.makeResponseJson(searchData);
+            responseCount = searchData.size();
         }catch (Exception e){
             //TODO:
         }
 
-        return result;
+        if(responseCount == 0){
+            return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
+        }
+        else{
+            return new ResponseEntity(result, HttpStatus.OK);
+        }
 
     }
 }
