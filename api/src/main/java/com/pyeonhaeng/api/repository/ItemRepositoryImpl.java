@@ -19,7 +19,7 @@ public class ItemRepositoryImpl implements ItemRepository{
     private EntityManager em;
 
     @Override
-    public List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable){
+    public List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable,Boolean history){
 
         QItemEntity item = QItemEntity.itemEntity;
         QSyncKey syncKey = QSyncKey.syncKey;
@@ -27,7 +27,15 @@ public class ItemRepositoryImpl implements ItemRepository{
 
         JPAQuery query =new JPAQuery(em);
 
-        BooleanExpression syncKeyCondition = item.sync_key.eq(syncKey.month);
+
+        BooleanExpression syncKeyCondition = null;
+        if(history) {
+            syncKeyCondition = item.sync_key.ne(syncKey.month);
+        }
+        else{
+            syncKeyCondition = item.sync_key.eq(syncKey.month);
+        }
+
 
         BooleanExpression filterCondition = item.name.like("%" + name + "%");
         if(cvs != null){

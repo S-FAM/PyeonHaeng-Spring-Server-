@@ -9,19 +9,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @RequiredArgsConstructor
 @Builder
 @Service
-public class SearchServiceImpl implements SearchService{
+public class HistoryServiceImpl implements HistoryService {
 
     @Autowired
     private final ItemRepositoryImpl itemRepository;
 
     @Override
-    public List<ItemEntity> searchItems(String name, String cvs, String tag, int offset, int limit, String order) throws Exception{
+    public List<ItemEntity> lookHistory(String name, String cvs) throws Exception{
 
-        List<ItemEntity> selectedItems = itemRepository.searchItemsbyConditions(name,tag,cvs,order, PageRequest.of(offset,limit),false);
+        List<ItemEntity> selectedItems = itemRepository.searchItemsbyConditions(name,null,cvs,null, PageRequest.of(0,24),true);
 
         return selectedItems;
 

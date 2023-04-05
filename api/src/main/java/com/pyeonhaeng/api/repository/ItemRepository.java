@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ItemRepository {
-    public abstract List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable);
+    public abstract List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable,Boolean history);
 }
