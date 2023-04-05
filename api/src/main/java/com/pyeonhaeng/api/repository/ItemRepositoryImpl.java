@@ -6,9 +6,6 @@ import com.pyeonhaeng.api.entity.QSyncKey;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -32,9 +29,15 @@ public class ItemRepositoryImpl implements ItemRepository{
 
         BooleanExpression syncKeyCondition = item.sync_key.eq(syncKey.month);
 
-        BooleanExpression filterCondition = item.name.like("%" + name + "%")
-                .and(item.store.eq(cvs))
-                .and(item.tag.eq(tag));
+        BooleanExpression filterCondition = item.name.like("%" + name + "%");
+        if(cvs != null){
+            filterCondition= filterCondition.and(item.store.eq(cvs));
+        }
+        if(tag != null){
+            filterCondition= filterCondition.and(item.tag.eq(tag));
+        }
+
+
 
         query.select(item)
                 .from(item)
@@ -42,9 +45,9 @@ public class ItemRepositoryImpl implements ItemRepository{
                 .on(syncKeyCondition)
                 .where(filterCondition);
 
-        if(order == "ASC"){
+        if(order == "asc"){
             query.orderBy(item.price.asc());
-        } else if (order == "DESC") {
+        } else if (order == "desc") {
             query.orderBy(item.price.desc());
         }
 

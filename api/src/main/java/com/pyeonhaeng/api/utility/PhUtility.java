@@ -11,6 +11,9 @@ public final class PhUtility {
 
 
     public static String checkName(String name){
+        if ("".equals(name) || name==null){
+            return null;
+        }
         name = name.replaceAll("[\'\"']", "");
         return name;
     }
