@@ -2,6 +2,8 @@ package com.pyeonhaeng.api.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pyeonhaeng.api.entity.ItemEntity;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,5 +29,24 @@ public final class PhUtility {
             //TODO: 에러 처리
         }
         return json;
+    }
+
+    public static String makeResponseJson(List<ItemEntity> entity){
+        int count =entity.size();
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("count",count);
+        if(count == 0){
+
+            jsonObject.put("message","Can't find any products.");
+
+        }
+        else{
+            jsonObject.put("products",entity);
+        }
+
+
+
+        return jsonObject.toString();
     }
 }

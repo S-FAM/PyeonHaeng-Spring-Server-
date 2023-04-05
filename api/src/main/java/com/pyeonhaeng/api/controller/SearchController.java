@@ -65,7 +65,7 @@ public class SearchController {
 
         try{
             List<ItemEntity> searchData = searchServiceImpl.searchItems(processedName,processedCvs,processedTag,offset,limit,order);
-            result = PhUtility.entity2Json(searchData);
+            result = PhUtility.makeResponseJson(searchData);
         }catch (Exception e){
             //TODO:
         }
