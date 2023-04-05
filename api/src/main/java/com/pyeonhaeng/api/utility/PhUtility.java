@@ -31,6 +31,7 @@ public final class PhUtility {
         return json;
     }
 
+
     public static String makeResponseJson(List<ItemEntity> entity){
         int count =entity.size();
         JSONObject jsonObject = new JSONObject();
@@ -42,6 +43,7 @@ public final class PhUtility {
 
         }
         else{
+            entity.stream().forEach(item -> item.setPk(0));
             jsonObject.put("products",entity);
         }
 

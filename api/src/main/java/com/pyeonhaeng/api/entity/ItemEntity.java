@@ -43,4 +43,8 @@ public class ItemEntity {
         this.tag = tag;
         this.sync_key = sync_key;
     }
+
+    public void setPk(int value){
+        this.pk = value;
+    }
 }
