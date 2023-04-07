@@ -2,6 +2,7 @@ package com.pyeonhaeng.api.controller;
 
 
 import com.pyeonhaeng.api.entity.ItemEntity;
+import com.pyeonhaeng.api.entity.ItemReturnData;
 import com.pyeonhaeng.api.service.SearchServiceImpl;
 import com.pyeonhaeng.api.utility.PhUtility;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SearchController {
 
     private final SearchServiceImpl searchServiceImpl;
-    @GetMapping("search")
+    @RequestMapping(value = "search", produces = "application/json")
     public ResponseEntity searchItem(
             @RequestParam(value = "name",required = false) String name,
             @RequestParam(value = "cvs") String cvs,
@@ -32,6 +33,9 @@ public class SearchController {
 
         //name에서 따음표 제거
         String processedName = PhUtility.checkName(name);
+        if ("".equals(processedName) || processedName==null){
+            processedName ="";
+        }
         
         //따음표 제거
         String processedCvs = PhUtility.checkName(cvs);
@@ -68,7 +72,7 @@ public class SearchController {
         int responseCount = 0;
 
         try{
-            List<ItemEntity> searchData = searchServiceImpl.searchItems(processedName,processedCvs,processedTag,offset,limit,order);
+            List<ItemReturnData> searchData = searchServiceImpl.searchItems(processedName,processedCvs,processedTag,offset,limit,order);
             result = PhUtility.makeResponseJson(searchData);
             responseCount = searchData.size();
         }catch (Exception e){

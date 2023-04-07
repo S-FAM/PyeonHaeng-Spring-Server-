@@ -1,6 +1,7 @@
 package com.pyeonhaeng.api.service;
 
 import com.pyeonhaeng.api.entity.ItemEntity;
+import com.pyeonhaeng.api.entity.ItemReturnData;
 import com.pyeonhaeng.api.repository.ItemRepositoryImpl;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,9 @@ public class HistoryServiceImpl implements HistoryService {
     private final ItemRepositoryImpl itemRepository;
 
     @Override
-    public List<ItemEntity> lookHistory(String name, String cvs) throws Exception{
+    public List<ItemReturnData> lookHistory(String name, String cvs) throws Exception{
 
-        List<ItemEntity> selectedItems = itemRepository.searchItemsbyConditions(name,null,cvs,null, PageRequest.of(0,24),true);
+        List<ItemReturnData> selectedItems = itemRepository.searchItemsbyConditions(name,null,cvs,null, PageRequest.of(0,24),true);
 
         return selectedItems;
 

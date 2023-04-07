@@ -2,6 +2,7 @@ package com.pyeonhaeng.api.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pyeonhaeng.api.entity.ItemEntity;
+import com.pyeonhaeng.api.entity.ItemReturnData;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,7 +21,7 @@ public final class PhUtility {
         return name;
     }
 
-    public static String entity2Json(List<ItemEntity> entity){
+    public static String entity2Json(List<ItemReturnData> entity){
         ObjectMapper mapper = new ObjectMapper();
         String json = new String();
         try{
@@ -32,7 +33,7 @@ public final class PhUtility {
     }
 
 
-    public static String makeResponseJson(List<ItemEntity> entity){
+    public static String makeResponseJson(List<ItemReturnData> entity){
         int count =entity.size();
         JSONObject jsonObject = new JSONObject();
 
@@ -43,7 +44,6 @@ public final class PhUtility {
 
         }
         else{
-            entity.stream().forEach(item -> item.setPk(0));
             jsonObject.put("products",entity);
         }
 

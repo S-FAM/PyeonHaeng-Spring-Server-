@@ -2,6 +2,7 @@ package com.pyeonhaeng.api.controller;
 
 
 import com.pyeonhaeng.api.entity.ItemEntity;
+import com.pyeonhaeng.api.entity.ItemReturnData;
 import com.pyeonhaeng.api.service.HistoryServiceImpl;
 import com.pyeonhaeng.api.utility.PhUtility;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ import java.util.List;
 public class HistoryController {
 
     private final HistoryServiceImpl historyServiceImpl;
-    @GetMapping("history")
+
+    @RequestMapping(value = "history", produces = "application/json")
     public ResponseEntity searchItem(
             @RequestParam(value = "name",required = false) String name,
             @RequestParam(value = "cvs") String cvs){
@@ -39,7 +41,7 @@ public class HistoryController {
         int responseCount = 0;
 
         try{
-            List<ItemEntity> searchData = historyServiceImpl.lookHistory(processedName,processedCvs);
+            List<ItemReturnData> searchData = historyServiceImpl.lookHistory(processedName,processedCvs);
             result = PhUtility.makeResponseJson(searchData);
             responseCount = searchData.size();
         }catch (Exception e){

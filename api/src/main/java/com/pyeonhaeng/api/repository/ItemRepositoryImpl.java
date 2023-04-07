@@ -1,8 +1,10 @@
 package com.pyeonhaeng.api.repository;
 
 import com.pyeonhaeng.api.entity.ItemEntity;
+import com.pyeonhaeng.api.entity.ItemReturnData;
 import com.pyeonhaeng.api.entity.QItemEntity;
 import com.pyeonhaeng.api.entity.QSyncKey;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
@@ -19,7 +21,7 @@ public class ItemRepositoryImpl implements ItemRepository{
     private EntityManager em;
 
     @Override
-    public List<ItemEntity> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable,Boolean history){
+    public List<ItemReturnData> searchItemsbyConditions(String name, String tag, String cvs, String order, Pageable pageable,Boolean history){
 
         QItemEntity item = QItemEntity.itemEntity;
         QSyncKey syncKey = QSyncKey.syncKey;
@@ -47,7 +49,14 @@ public class ItemRepositoryImpl implements ItemRepository{
 
 
 
-        query.select(item)
+        query.select(Projections.fields(ItemReturnData.class,
+                        item.sync_key.as("date"),
+                        item.img,
+                        item.name,
+                        item.price,
+                        item.store,
+                        item.tag)
+                )
                 .from(item)
                 .innerJoin(syncKey)
                 .on(syncKeyCondition)
@@ -61,7 +70,7 @@ public class ItemRepositoryImpl implements ItemRepository{
 
         query.offset(pageable.getOffset()).limit(pageable.getPageSize());
 
-        List<ItemEntity> result = query.fetch();
+        List<ItemReturnData> result = query.fetch();
 
         return result;
 
