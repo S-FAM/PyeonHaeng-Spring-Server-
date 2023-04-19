@@ -37,7 +37,6 @@ public class SearchController {
             @RequestParam(value = "limit",required = false,defaultValue = "10") int limit,
             @RequestParam(value = "order-by",required = false) String order){
 
-        logger.info("test log");
         //name에서 따음표 제거
         String processedName = PhUtility.checkName(name);
         if ("".equals(processedName) || processedName==null){
