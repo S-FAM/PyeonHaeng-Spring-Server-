@@ -6,8 +6,10 @@ import com.pyeonhaeng.api.entity.ItemReturnData;
 import com.pyeonhaeng.api.service.SearchServiceImpl;
 import com.pyeonhaeng.api.utility.PhUtility;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
 @RestController
 public class SearchController {
 
+
+    private final static Logger logger = LoggerFactory.getLogger(SearchController.class);
     private final SearchServiceImpl searchServiceImpl;
     @RequestMapping(value = "search", produces = "application/json")
     public ResponseEntity searchItem(
@@ -31,6 +37,7 @@ public class SearchController {
             @RequestParam(value = "limit",required = false,defaultValue = "10") int limit,
             @RequestParam(value = "order-by",required = false) String order){
 
+        logger.info("test log");
         //name에서 따음표 제거
         String processedName = PhUtility.checkName(name);
         if ("".equals(processedName) || processedName==null){
@@ -76,7 +83,7 @@ public class SearchController {
             result = PhUtility.makeResponseJson(searchData);
             responseCount = searchData.size();
         }catch (Exception e){
-            //TODO:
+            logger.error("에러 발생 : " + e);
         }
 
         if(responseCount == 0){

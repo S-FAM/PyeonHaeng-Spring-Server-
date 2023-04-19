@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <properties>
+        <property name="name">pyh</property>
+        <property name="pattern">%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</property>
+        <property name="path">./phlogs</property>
+    </properties>
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+        <!-- log 파일을 저장하는 위치와 정책 -->
+        <RollingFile name="SaveFile">
+            <FileName>${path}/${name}.log</FileName>
+            <FilePattern>${path}/${name}%d{yyyy-MM-dd-HH-mm}.log</FilePattern>
+            <PatternLayout pattern="${pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+            </Policies>
+            <DefaultRolloverStrategy max="7" fileIndex="max" >
+                <Delete basePath = "{로그파일 저장 위치}" maxDepth = "1">
+                    <!-- 3일이 경과한 로그파일은 자동 삭제 -->
+                    <IfLastModified age = "3d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- 기본(디폴트) loger 설정-->
+        <Root level="INFO">
+            <AppenderRef ref="LogToConsole"/>
+            <AppenderRef ref="SaveFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
